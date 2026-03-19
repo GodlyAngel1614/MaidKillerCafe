@@ -32,6 +32,8 @@ class DialogueBox {
       index++;
       charIndex = 0;
       currentText = "";
+    } else if (state == 1 && index >= dialogue.size() - 1) {
+      state = 2;
     }
   }
 

@@ -2,6 +2,8 @@
 
 import processing.sound.*;
 SoundFile mainThemeSong;
+SoundFile firstScene;
+int prevState = -1;
 
 ArrayList<STar> stars = new ArrayList<STar>();
 ArrayList<BloodDrop> blood = new ArrayList<BloodDrop>();
@@ -20,18 +22,19 @@ int glitchTimer = 0;
 int state = 0;
 
 void setup() {
-  //size(800, 600);
-  fullScreen();
+  size(800, 600);
+  //fullScreen();
 
   titleX = width / 2;
   titleY = height / 3;
-  
+
   scene1 = new FirstScene();
-  
+
   mainThemeSong = new SoundFile(this, "MainThemeSong.mp3");
   mainThemeSong.play();
   mainThemeSong.loop();
   mainThemeSong.rate(1.2);
+
 
   yesButton = new Button(width/2 - 110, height/2 + 40, 100, 40, "YES");
   glitchYesButton = new Button(width/2 + 10, height/2 + 40, 100, 40, "Y̸E̷S̴");
@@ -52,34 +55,63 @@ void setup() {
 
   textAlign(CENTER, CENTER);
   textSize(40);
+}
+
+void onStateChanged(int newState) {
+
+  // leaving menu
+  if (newState == 1) {
+    mainThemeSong.stop();
+
+    if (firstScene != null) {
+      firstScene.stop(); // safe
+    }
+
+    firstScene = new SoundFile(this, "Scene1.mp3");
+    firstScene.loop();
+    firstScene.rate(0.85);
+  }
+
+  if (newState == 0) {
+    if (firstScene != null) firstScene.stop();
+    mainThemeSong.loop();
+  }
   
-  if (state == 1) {
-    scene1.display();
+  if (newState == 2) {
+    firstScene.stop();
   }
 }
 
 void draw() {
-  if (state == 0) {
-    drawSky();
-    drawMoon();
-    drawStars();
-    drawClouds();
 
-    updateGlitch();
-
-    drawTitle();
-    drawBlood();
-    drawButtons();
-    drawGlitchOverlay();
+  if (state != prevState) {
+    onStateChanged(state);
+    prevState = state;
     
-    if (showModal) {
-      drawModal();
-    }
-  } else if (state == 1) {
-    mainThemeSong.stop();
-    scene1.drawf();
-    scene1.display();
+    print(state);
   }
+
+  if (state == 0) {
+    ZeroState();
+  } else if (state == 1) {
+    scene1.drawf();
+  }
+}
+
+void ZeroState() {
+  drawSky();
+  drawMoon();
+  drawStars();
+  drawClouds();
+
+  updateGlitch();
+
+  drawTitle();
+  drawBlood();
+  drawButtons();
+  drawGlitchOverlay();
+
+  if (showModal) drawModal();
 }
 
 void drawModal() {
@@ -177,7 +209,7 @@ void drawTitle() {
 
     fill(0, 255, 255);
     text(title, titleX - offset, titleY);
-    
+
     mainThemeSong.rate(0.8);
   } else {
     mainThemeSong.rate(1.2);
@@ -250,6 +282,9 @@ void drawGlitchOverlay() {
 }
 
 void mousePressed() {
+  if (state == 1) {
+    scene1.mousey();
+  }
 
   // If modal is open, ONLY interact with modal
   if (showModal) {

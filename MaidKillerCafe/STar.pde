@@ -24,12 +24,12 @@ class STar {
   void display() {
     pushMatrix();
     translate(x, y);
-  
+
     noStroke();
-   fill(brightness);
-  
+    fill(brightness);
+
     float s = 3;
-  
+
     beginShape();
     vertex(0, -s);
     vertex(s/3, -s/3);
@@ -40,7 +40,7 @@ class STar {
     vertex(-s, 0);
     vertex(-s/3, -s/3);
     endShape(CLOSE);
-  
+
     popMatrix();
   }
 }
