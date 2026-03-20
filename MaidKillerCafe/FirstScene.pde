@@ -2,10 +2,11 @@
 class FirstScene {
 
   DialogueBox box;
+  MaidKillerCafe app;
 
-  FirstScene() {
+  FirstScene(MaidKillerCafe app) {
     ArrayList<String> lines = new ArrayList<String>();
-
+    this.app = app;
     lines.add("Hi~");
     lines.add("Welcome to the forgot the name cafe!");
     lines.add("Today is your first day, I bet you're nervous.");
@@ -14,7 +15,7 @@ class FirstScene {
     lines.add("Anyways, I won't be coming to help you out! That's not the job of a manager.");
     lines.add("Good luck!");
 
-    box = new DialogueBox("Manager", lines);
+    box = new DialogueBox("Manager", lines, app);
   }
 
   void display() {

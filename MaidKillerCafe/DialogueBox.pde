@@ -8,10 +8,12 @@ class DialogueBox {
   int charIndex = 0;
 
   int typeSpeed = 2; // lower = faster
+  MaidKillerCafe app;
 
-  DialogueBox(String tag, ArrayList<String> dialogueLines) {
+  DialogueBox(String tag, ArrayList<String> dialogueLines, MaidKillerCafe app) {
     this.speakerTag = tag;
     this.dialogue = dialogueLines;
+    this.app = app;
   }
 
   void update() {
@@ -33,7 +35,7 @@ class DialogueBox {
       charIndex = 0;
       currentText = "";
     } else if (state == 1 && index >= dialogue.size() - 1) {
-      state = 2;
+      app.state = 2;
     }
   }
 

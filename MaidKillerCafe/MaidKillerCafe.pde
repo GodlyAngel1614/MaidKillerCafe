@@ -14,12 +14,16 @@ Button glitchYesButton;
 String title = "MAID KILLER CAFE";
 float titleX, titleY;
 FirstScene scene1;
+SecondScene scene2;
+Player player;
+Customer custo;
 DialogueBox box;
 
 boolean glitching = false;
 boolean showModal = false;
 int glitchTimer = 0;
 int state = 0;
+int day = 1;
 
 void setup() {
   size(800, 600);
@@ -28,12 +32,15 @@ void setup() {
   titleX = width / 2;
   titleY = height / 3;
 
-  scene1 = new FirstScene();
+  player = new Player();
+  scene1 = new FirstScene(this);
+  scene2 = new SecondScene(player);
+  custo = new Customer(this);
 
   mainThemeSong = new SoundFile(this, "MainThemeSong.mp3");
   mainThemeSong.play();
   mainThemeSong.loop();
-  mainThemeSong.rate(1.2);
+  mainThemeSong.rate(1);
 
 
   yesButton = new Button(width/2 - 110, height/2 + 40, 100, 40, "YES");
@@ -71,14 +78,14 @@ void onStateChanged(int newState) {
     firstScene.loop();
     firstScene.rate(0.85);
   }
-
   if (newState == 0) {
     if (firstScene != null) firstScene.stop();
     mainThemeSong.loop();
   }
-  
+
   if (newState == 2) {
     firstScene.stop();
+    custo.spawn();
   }
 }
 
@@ -87,14 +94,14 @@ void draw() {
   if (state != prevState) {
     onStateChanged(state);
     prevState = state;
-    
-    print(state);
   }
 
   if (state == 0) {
     ZeroState();
   } else if (state == 1) {
     scene1.drawf();
+  } else if (state == 2) {
+    scene2.drawf();
   }
 }
 
@@ -212,7 +219,7 @@ void drawTitle() {
 
     mainThemeSong.rate(0.8);
   } else {
-    mainThemeSong.rate(1.2);
+    mainThemeSong.rate(1);
   }
 
   fill(255);
@@ -252,7 +259,7 @@ void drawButtons() {
 void updateGlitch() {
   if (!glitching && random(1) < 0.01) {
     glitching = true;
-    glitchTimer = int(random(5, 20));
+    glitchTimer = int(random(35, 68));
   }
 
   if (glitching) {
@@ -288,13 +295,12 @@ void mousePressed() {
 
   // If modal is open, ONLY interact with modal
   if (showModal) {
-    if (yesButton.hovered) {
+    if (yesButton.hovered && state < 1) {
       println("Normal Yes...");
       state = 1;
-      // could start game normally
     }
 
-    if (glitchYesButton.hovered) {
+    if (glitchYesButton.hovered && state < 1) {
       println("Glitch Yes 😈");
       glitching = true;
       glitchTimer = 60; // force big glitch
@@ -315,5 +321,13 @@ void mousePressed() {
         exit();
       }
     }
+  }
+}
+
+void keyPressed() {
+  if (key == 'q') {
+    print("Killing customer");
+  } else if (key == 'e') {
+    print("picking up customers dead body.");
   }
 }
