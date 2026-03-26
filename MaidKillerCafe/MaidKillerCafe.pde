@@ -16,7 +16,7 @@ float titleX, titleY;
 FirstScene scene1;
 SecondScene scene2;
 Player player;
-Customer custo;
+CustomerManager custo;
 DialogueBox box;
 
 boolean glitching = false;
@@ -35,7 +35,7 @@ void setup() {
   player = new Player();
   scene1 = new FirstScene(this);
   scene2 = new SecondScene(player);
-  custo = new Customer(this);
+  custo = new CustomerManager(this);
 
   mainThemeSong = new SoundFile(this, "MainThemeSong.mp3");
   mainThemeSong.play();
@@ -85,7 +85,6 @@ void onStateChanged(int newState) {
 
   if (newState == 2) {
     firstScene.stop();
-    custo.spawn();
   }
 }
 
@@ -102,6 +101,9 @@ void draw() {
     scene1.drawf();
   } else if (state == 2) {
     scene2.drawf();
+    
+    custo.display();
+    custo.update();  
   }
 }
 

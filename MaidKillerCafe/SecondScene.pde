@@ -1,7 +1,7 @@
 class SecondScene {
   PImage cafe;
   Player player;
-  
+
   SecondScene(Player player) {
     this.player = player;
     cafe = loadImage("Cafe.jpg");
@@ -12,9 +12,9 @@ class SecondScene {
   }
 
   void drawf() {
-   image(cafe, 0, 0, width, height);
-   
-   player.drawf();
-   player.update();
+    image(cafe, 0, 0, width, height);
+
+    player.drawf();
+    player.update();
   }
 }
