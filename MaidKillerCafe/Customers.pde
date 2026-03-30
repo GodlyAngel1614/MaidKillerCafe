@@ -45,10 +45,12 @@ class CustomerManager {
   void spawn() {
     println("Customer spawned!");
 
-    int x = 100 + queue.size() * 60; // simple line spacing
-    int y = 400;
+    int startX = 200;   // entrance point
+    int startY = 400;
 
-    Customer c = new Customer(customerImg, x, y);
+    int slot = queue.size();
+
+    Customer c = new Customer(customerImg, startX, startY, slot);
     queue.add(c);
   }
 }

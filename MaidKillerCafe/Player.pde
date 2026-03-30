@@ -49,23 +49,25 @@ class Player {
       }
       if (key == 'w') {
         y -= speed;
-        setAnimation(3);
+        setAnimation(2);
         moving = true;
       }
       if (key == 'a') {
         x -= speed;
-        setAnimation(1);
+        setAnimation(3);
         moving = true;
       }
       if (key == 'd') {
         x += speed;
-        setAnimation(2);
+        setAnimation(1);
         moving = true;
       }
     }
 
     if (!moving) {
-      setAnimation(0); 
+      //setAnimation(0); 
+      currentRow = 0;
+      currentFrame = 0;
     }
   }
 
