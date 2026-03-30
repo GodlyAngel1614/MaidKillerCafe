@@ -12,9 +12,10 @@ class Customer {
 
   int speed = 1;
   int x, y;
-  int targetY = height / 2 - 50;
+  int targetY = height / 2 + 90;
 
   boolean atTarget = false;
+  int stage = 0;
 
   String order;
 
@@ -23,6 +24,7 @@ class Customer {
 
   int slotIndex;
   int targetX;
+  int targetY2;
 
   Customer(PImage sprite, int x, int y, int slotIndex) {
     this.sprite = sprite;
@@ -30,12 +32,12 @@ class Customer {
     this.y = y;
     this.slotIndex = slotIndex;
 
-    targetX = 235 + slotIndex * 70; // spacing between customers
+    targetX = 340; //+ slotIndex * 70; // spacing between customers
 
     generateOrder();
 
     frameW = sprite.width / cols + 3;
-    frameH = sprite.height / rows + 1;
+    frameH = sprite.height / rows + 2;
 
     frames = new PImage[rows][cols];
 
@@ -68,20 +70,27 @@ class Customer {
 
     if (atTarget) {
       floatOffset = sin(frameCount * 0.05) * 5;
-      alpha = min(alpha + 10, 255); // 👈 THIS WAS MISSING
+      alpha = min(alpha + 10, 255); // THIS WAS MISSING
     }
-    // move vertically first
+    // move up first
     if (y > targetY) {
       y--;
       setAnimation(2);
     } else {
-      atTarget = true;
+      stage = 1;
+      // atTarget = true;
     }
 
-    // move horizontally into position
-    if (atTarget && x < targetX) {
-      x++;
-      setAnimation(1); // walking right
+    // move right to get into position
+    if (stage == 1 && x > targetX) {
+      x--;
+      print(x);
+      setAnimation(3); // set sprite to right mode (CHECK THE PICTURE) count from 0-3
+    } else {
+      stage = 2;
+    }
+
+    if (stage == 2) {
     }
 
     // animation
@@ -101,11 +110,11 @@ class Customer {
     int boxH = 50;
 
     int boxX = x;
-    int boxY = int(y - 60 + floatOffset);
+    int boxY = int(y - 60 + floatOffset); // Ignore the error message
 
-    // 🌟 Glow for big combos
+    // Glow for big combos (CHANGE COLOR ITS UGLY)
     if (order.contains("+")) {
-      fill(255, 255, 150, 80);
+      fill(105, 252, 133, 25);
       noStroke();
       rect(boxX - 5, boxY - 5, boxW + 10, boxH + 10, 12);
     }

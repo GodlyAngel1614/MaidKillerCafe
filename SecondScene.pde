@@ -4,7 +4,7 @@ class SecondScene {
 
   SecondScene(Player player) {
     this.player = player;
-    cafe = loadImage("Cafe.jpg");
+    cafe = loadImage("Cafe.png");
   }
 
   void display() {

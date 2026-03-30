@@ -45,8 +45,8 @@ class CustomerManager {
   void spawn() {
     println("Customer spawned!");
 
-    int startX = 200;   // entrance point
-    int startY = 400;
+    int startX = 450;   // entrance point
+    int startY = 600;
 
     int slot = queue.size();
 

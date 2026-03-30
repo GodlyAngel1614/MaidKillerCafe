@@ -85,6 +85,12 @@ void onStateChanged(int newState) {
 
   if (newState == 2) {
     firstScene.stop();
+    
+    // second song play (Find some music might already have some.)
+  }
+  
+  if (newState == 3) {
+    // third song play second song stop.
   }
 }
 
@@ -104,6 +110,8 @@ void draw() {
     
     custo.display();
     custo.update();  
+  } else if (state == 3) {
+    // play stage 3 music... Gotta get it. 
   }
 }
 
