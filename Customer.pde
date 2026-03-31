@@ -1,3 +1,10 @@
+static enum State {
+  ENTERING,
+    MOVING_TO_LINE,
+    MOVING_TO_SLOT,
+    IDLE
+}
+
 class Customer {
   PImage sprite;
   PImage[][] frames;
@@ -12,7 +19,7 @@ class Customer {
 
   int speed = 1;
   int x, y;
-  int targetY = height / 2 + 90;
+  int targetY = height / 2 + 56;
 
   boolean atTarget = false;
   int stage = 0;
@@ -26,14 +33,27 @@ class Customer {
   int targetX;
   int targetY2;
 
+  String[] kawaiiReplies = {
+    "Omg kawaii desu! 💖",
+    "Arigatou gozaimasu~ 🍰",
+    "Sugoi! Thank you~ 😆",
+    "Ureshii! So yummy~ 🍵"
+  };
+
+  String reaction = ""; // store reaction to display
+  int reactionTimer = 0; // fade out timer
+
+
+  State state = State.ENTERING;
+
   Customer(PImage sprite, int x, int y, int slotIndex) {
     this.sprite = sprite;
     this.x = x;
     this.y = y;
     this.slotIndex = slotIndex;
 
-    targetX = 340; //+ slotIndex * 70; // spacing between customers
-
+    targetX = 310; //+ slotIndex * 70; // spacing between customers was removed needed it for vertical? Lining up instead.
+    targetY2 = height / 2 + 50 + slotIndex * 70; // Vertical lining up DO NOT CHANGE THE 50 Estimated. The lower the higher
     generateOrder();
 
     frameW = sprite.width / cols + 3;
@@ -50,14 +70,23 @@ class Customer {
           frameH
           );
       }
-    }
+    };
   }
 
-  // 🍔 Generate combo orders
+  // Generate combo orders
   void generateOrder() {
-    String[] items = {"Burger", "Fries", "Pizza", "Soda"};
+    String[] items = {
+      "Heart Pancakes",
+      "Rose Latte",
+      "Cream Puff",
+      "Macaron Stack",
+      "Fruit Parfait",
+      "Honey Milk Tea",
+      "Matcha Latte",
+      "Strawberry Soda"
+    };
 
-    int count = int(random(1, 4)); // 1–3 items
+    int count = int(random(1, 3)); // 1–2 items why? Count from 0.. (4) doesn't work thats too much change the font for kawaiii desu
 
     order = "";
     for (int i = 0; i < count; i++) {
@@ -68,53 +97,60 @@ class Customer {
 
   void update() {
 
-    if (atTarget) {
+    if (state == State.ENTERING) {
+      if (y > targetY) {
+        y--;
+        setAnimation(2);
+      } else {
+        state = State.MOVING_TO_LINE;
+      }
+    } else if (state == State.MOVING_TO_LINE) {
+      if (x > targetX) {
+        x--;
+        setAnimation(3);
+      } else {
+        state = State.MOVING_TO_SLOT;
+      }
+    } else if (state == State.MOVING_TO_SLOT) {
+      if (abs(y - targetY2) > 1) {
+        if (y < targetY2) {
+          y++;  // move DOWN
+        } else {
+          y--;  // move UP
+        }
+        setAnimation(2);
+      } else {
+        y = targetY2; // snap perfectly into place
+        state = State.IDLE;
+        atTarget = true;
+      }
+    } else if (state == State.IDLE) {
       floatOffset = sin(frameCount * 0.05) * 5;
-      alpha = min(alpha + 10, 255); // THIS WAS MISSING
-    }
-    // move up first
-    if (y > targetY) {
-      y--;
-      setAnimation(2);
-    } else {
-      stage = 1;
-      // atTarget = true;
+      alpha = min(alpha + 10, 255);
     }
 
-    // move right to get into position
-    if (stage == 1 && x > targetX) {
-      x--;
-      print(x);
-      setAnimation(3); // set sprite to right mode (CHECK THE PICTURE) count from 0-3
-    } else {
-      stage = 2;
-    }
-
-    if (stage == 2) {
-    }
-
-    // animation
-    if (frameCount % 10 == 0 && (!atTarget || x < targetX)) {
+    // animation logic
+    if (frameCount % 10 == 0 && state != State.IDLE) {
       currentFrame = (currentFrame + 1) % cols;
     }
 
-    if (atTarget && x == targetX) {
+    if (state == State.IDLE) {
       currentFrame = 0;
     }
   }
 
-  void drawOrderUI() {
+  void drawOrderUI(HashMap<String, Integer> Inventory, ArrayList<Customer> queue) {
     if (!atTarget) return;
 
     int boxW = 140;
     int boxH = 50;
 
     int boxX = x;
-    int boxY = int(y - 60 + floatOffset); // Ignore the error message
+    int boxY = int(y - 60 + floatOffset);
 
-    // Glow for big combos (CHANGE COLOR ITS UGLY)
+    // Glow for big combos
     if (order.contains("+")) {
-      fill(105, 252, 133, 25);
+      fill(255, 192, 203, 50); // pastel pink glow
       noStroke();
       rect(boxX - 5, boxY - 5, boxW + 10, boxH + 10, 12);
     }
@@ -133,7 +169,48 @@ class Customer {
       boxX + 25, boxY + boxH,
       boxX + 20, boxY + boxH + 10
       );
+
+    // handle clicking
+    if (mousePressed &&
+      mouseX > boxX && mouseX < boxX + boxW &&
+      mouseY > boxY && mouseY < boxY + boxH) {
+
+      if (Inventory.containsKey(order) && Inventory.get(order) > 0) {
+        reaction = kawaiiReplies[int(random(kawaiiReplies.length))];
+
+        // decrease inventory
+        Inventory.put(order, Inventory.get(order) - 1);
+
+        // remove this customer from queue after showing reaction
+        reactionTimer = 60; // show reaction 1 second (assuming 60 fps)
+      } else {
+        reaction = "Ahhhh! I can't eat this yet~ 😭";
+        reactionTimer = 60;
+      }
+    }
+
+    // display reaction above customer
+    if (reactionTimer > 0) {
+      fill(255, 0, 255, 200);
+      textSize(14);
+      textAlign(CENTER, BOTTOM);
+      text(reaction, x + boxW/2, boxY - 10);
+      reactionTimer--;
+
+      // When timer finishes and order was correct, remove from queue
+      if (reactionTimer == 0 && reaction != "Ahhhh! I can't eat this yet~ 😭") {
+        // Remove customer and shift others
+        custo.queue.remove(this);
+
+        // adjust slotIndex and targetY2 for remaining customers
+        for (int i = 0; i < custo.queue.size(); i++) {
+          custo.queue.get(i).slotIndex = i;
+          custo.queue.get(i).targetY2 = height / 2 + 50 + i * 70;
+        }
+      }
+    }
   }
+
 
   void setAnimation(int row) {
     if (currentRow != row) {
@@ -144,6 +221,5 @@ class Customer {
 
   void display() {
     image(frames[currentRow][currentFrame], x, y);
-    drawOrderUI();
   }
 }

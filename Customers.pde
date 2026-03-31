@@ -39,6 +39,7 @@ class CustomerManager {
   void display() {
     for (Customer c : queue) {
       c.display();
+      c.drawOrderUI(inventory, custo.queue);
     }
   }
 
@@ -51,6 +52,7 @@ class CustomerManager {
     int slot = queue.size();
 
     Customer c = new Customer(customerImg, startX, startY, slot);
+
     queue.add(c);
   }
 }

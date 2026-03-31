@@ -18,12 +18,17 @@ SecondScene scene2;
 Player player;
 CustomerManager custo;
 DialogueBox box;
+HashMap<String, Integer> inventory = new HashMap<String, Integer>();
 
 boolean glitching = false;
 boolean showModal = false;
 int glitchTimer = 0;
 int state = 0;
 int day = 1;
+
+MenuButtons[] menu;
+String currentTab = "";
+HashMap<String, String[]> recipes = new HashMap<String, String[]>();
 
 void setup() {
   size(800, 600);
