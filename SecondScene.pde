@@ -178,12 +178,12 @@ class SecondScene {
       "Heart Pancakes",
       "Rose Latte",
       "Cream Puff",
-      "Honey Milk Tea",
-      "Macaron Stack",
-      "Matcha Latte",
       "Fruit Parfait",
+      "Honey Milk Tea",
+      "Matcha Latte",
       "Strawberry Soda"
     };
+
     for (int i = 0; i < options.length; i++) {
       int bx = width/2 - 100;
       int by = 150 + i * 60;

@@ -13,7 +13,7 @@ class FirstScene {
     lines.add("It's a big responsibility, being the cashier.");
     lines.add("I'm sure your parents are so proud of you.");
     lines.add("Anyways, I won't be coming to help you out! That's not the job of a manager.");
-    lines.add("Good luck!");
+    lines.add("Have a greeeat first day!");
 
     box = new DialogueBox("Manager", lines, app);
   }

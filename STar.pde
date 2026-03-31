@@ -7,7 +7,7 @@ class STar {
   STar() {
     x = random(width);
     y = random(height);
-    speed = random(0.5, 2);
+    speed = random(0.5, 2.0);
     brightness = random(150, 255);
     twinkleSpeed = random(0.05, 0.2);
   }

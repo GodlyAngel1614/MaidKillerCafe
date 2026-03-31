@@ -3,6 +3,7 @@
 import processing.sound.*;
 SoundFile mainThemeSong;
 SoundFile firstScene;
+SoundFile secondScene;
 int prevState = -1;
 
 ArrayList<STar> stars = new ArrayList<STar>();
@@ -15,6 +16,7 @@ String title = "MAID KILLER CAFE";
 float titleX, titleY;
 FirstScene scene1;
 SecondScene scene2;
+ThirdScene scene3;
 Player player;
 CustomerManager custo;
 DialogueBox box;
@@ -25,10 +27,12 @@ boolean showModal = false;
 int glitchTimer = 0;
 int state = 0;
 int day = 1;
+int kills = 0;
 
 MenuButtons[] menu;
 String currentTab = "";
 HashMap<String, String[]> recipes = new HashMap<String, String[]>();
+
 
 void setup() {
   size(800, 600);
@@ -41,11 +45,14 @@ void setup() {
   scene1 = new FirstScene(this);
   scene2 = new SecondScene(player);
   custo = new CustomerManager(this);
+  scene3 = new ThirdScene(this);
 
   mainThemeSong = new SoundFile(this, "MainThemeSong.mp3");
   mainThemeSong.play();
   mainThemeSong.loop();
   mainThemeSong.rate(1);
+  
+  secondScene = new SoundFile(this, "CafeMusic.mp3");
 
 
   yesButton = new Button(width/2 - 110, height/2 + 40, 100, 40, "YES");
@@ -90,10 +97,11 @@ void onStateChanged(int newState) {
 
   if (newState == 2) {
     firstScene.stop();
-    
+    secondScene.play();
+    secondScene.loop();    
     // second song play (Find some music might already have some.)
   }
-  
+
   if (newState == 3) {
     // third song play second song stop.
   }
@@ -112,11 +120,21 @@ void draw() {
     scene1.drawf();
   } else if (state == 2) {
     scene2.drawf();
-    
+
     custo.display();
-    custo.update();  
+    custo.update();
   } else if (state == 3) {
-    // play stage 3 music... Gotta get it. 
+    scene3.drawf(); // its line scene 1!
+  }
+  
+  if (state == 10) {
+    // Impossible state for day count we only have 4 days THIS is for the killer ending
+  } else if (state == 11) {
+    // Jail ending
+  } else if (state == 12) {
+    // Accomplice ending add in Amaris sprite or make it in the character thing... If you manage to kill then you get an accomplice as an optional upgrade in day 2 
+  } else if (state == 13) {
+    // Become the manager? Either that or kill the manager... Super pending here. 
   }
 }
 
@@ -306,6 +324,8 @@ void drawGlitchOverlay() {
 void mousePressed() {
   if (state == 1) {
     scene1.mousey();
+  } else if (state == 3) {
+    scene3.mousey();
   }
 
   // If modal is open, ONLY interact with modal
