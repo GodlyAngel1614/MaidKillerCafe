@@ -20,7 +20,7 @@ class ThirdScene {
     if (app.kills == 0) {
       lines.add("No kills? What a bleeding heart.");
       lines.add("You get a kawaii sticker! You make me sick.");
-      lines.add("You have 3 days to redeem yourself!");
+      lines.add("Game over!");
       cutePic = loadImage("KawaiiSticker1.png");
     } else {
       lines.add("Wow! You really put the maid in killer! Keep it up~");
@@ -44,6 +44,10 @@ class ThirdScene {
     // Trigger sticker
     if (app.kills == 0 && box.index == 2) {
       showSticker = true;
+    }
+    
+    if (box.index == 4) {
+         app.day += 1;
     }
 
     if (showSticker) {

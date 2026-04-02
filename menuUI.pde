@@ -31,6 +31,12 @@ class menu {
     recipes.put("Tea Time Treat", new String[]{"Cream Puff", "Honey Milk Tea"});
     recipes.put("Morning Smile", new String[]{"Macaron Stack", "Matcha Latte"});
     recipes.put("Berry Bliss", new String[]{"Fruit Parfait", "Strawberry Soda"});
+    
+    tut.put("Click customer bubble to feed customer", new String[]{"Fruit Parfait", "Strawberry Soda"});
+    tut.put("Check stock to see what you have", new String[]{"Fruit Parfait", "Strawberry Soda"});
+    tut.put("Cooked food  will be inside stock", new String[]{"Fruit Parfait", "Strawberry Soda"});
+    tut.put("Use space to hit green bar when cooking", new String[]{"Fruit Parfait", "Strawberry Soda"});
+    tut.put("WASD to move", new String[]{"Fruit Parfait", "Strawberry Soda"});
   }
 
   void drawCookingGame() {
@@ -145,6 +151,13 @@ class menu {
         text(item + " x" + count, panelX + 10, panelY + yOffset);
         yOffset += 20;
       }
+    } else if (currentTab.equals("Instructions")) {
+      int yOffset = 50;
+
+      for (String tutorialName : tut.keySet()) {
+        text(tutorialName, panelX + 10, panelY + yOffset);
+        yOffset += 20;
+      }
     }
   }
 
@@ -214,6 +227,33 @@ class menu {
       }
     }
   }
+  
+  void drawTutorialMenu() {
+    fill(0, 150);
+    rect(0, 0, width, height);
+
+    String[] options = {
+      "Heart Pancakes",
+      "Rose Latte",
+      "Cream Puff",
+      "Fruit Parfait",
+      "Honey Milk Tea",
+      "Matcha Latte",
+      "Strawberry Soda"
+    };
+
+    for (int i = 0; i < options.length; i++) {
+      int bx = width/2 - 100;
+      int by = 150 + i * 60;
+
+      fill(255);
+      rect(bx, by, 200, 40, 10);
+
+      fill(0);
+      textAlign(CENTER, CENTER);
+      text(options[i], bx + 100, by + 20);
+    }
+  }
 
   void drawf() {
 
@@ -229,7 +269,7 @@ class menu {
         }
       }
     }
-
+    
     cookButton.update();
     cookButton.display();
 

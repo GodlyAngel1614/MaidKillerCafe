@@ -11,8 +11,8 @@ class Player {
   int currentRow = 0;
 
   int speed = 3;
-  int x = 200;
-  int y = 200;
+  int x = width / 2;
+  int y = height / 2;
 
   Player() {
     sprite = loadImage("player.png");

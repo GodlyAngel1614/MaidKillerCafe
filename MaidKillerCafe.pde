@@ -33,6 +33,7 @@ int kills = 0;
 MenuButtons[] menu;
 String currentTab = "";
 HashMap<String, String[]> recipes = new HashMap<String, String[]>();
+HashMap<String, String[]> tut = new HashMap<String, String[]>();
 
 
 void setup() {
