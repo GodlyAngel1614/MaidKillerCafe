@@ -14,7 +14,7 @@ class DialogueBox {
     this.speakerTag = tag;
     this.dialogue = dialogueLines;
     this.app = app;
-  }
+   }
 
   void update() {
     if (index >= dialogue.size()) return;

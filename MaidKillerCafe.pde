@@ -20,6 +20,7 @@ ThirdScene scene3;
 Player player;
 CustomerManager custo;
 DialogueBox box;
+menu menuUI;
 HashMap<String, Integer> inventory = new HashMap<String, Integer>();
 
 boolean glitching = false;
@@ -46,6 +47,7 @@ void setup() {
   scene2 = new SecondScene(player);
   custo = new CustomerManager(this);
   scene3 = new ThirdScene(this);
+  menuUI = new menu();
 
   mainThemeSong = new SoundFile(this, "MainThemeSong.mp3");
   mainThemeSong.play();
@@ -120,9 +122,9 @@ void draw() {
     scene1.drawf();
   } else if (state == 2) {
     scene2.drawf();
-
     custo.display();
     custo.update();
+    menuUI.drawf();
   } else if (state == 3) {
     scene3.drawf(); // its line scene 1!
   }
@@ -364,5 +366,15 @@ void keyPressed() {
     print("Killing customer");
   } else if (key == 'e') {
     print("picking up customers dead body.");
+  }
+  
+  if (state == 2) {
+    menuUI.keyPressedf();
+  }
+}
+
+void keyReleased() {
+  if (state == 2) {
+    menuUI.keyReleasedf();
   }
 }

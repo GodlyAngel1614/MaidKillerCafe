@@ -11,6 +11,7 @@ class Customer {
 
   int cols = 4;
   int rows = 4;
+  int speed = 3;
 
   int frameW, frameH;
   int currentFrame = 0;
@@ -90,17 +91,17 @@ class Customer {
     // Movement logic
     if (state == State.ENTERING) {
       if (y > targetY) {
-        y--;
         setAnimation(2);
+        y -= speed;
       } else state = State.MOVING_TO_LINE;
     } else if (state == State.MOVING_TO_LINE) {
       if (x > targetX) {
-        x--;
+        x -= speed;
         setAnimation(3);
       } else state = State.MOVING_TO_SLOT;
     } else if (state == State.MOVING_TO_SLOT) {
       if (abs(y - targetY2) > 1) {
-        y += (y < targetY2) ? 1 : -1;
+        y += (y < targetY2) ? speed : -speed;
         setAnimation(2);
       } else {
         y = targetY2;
