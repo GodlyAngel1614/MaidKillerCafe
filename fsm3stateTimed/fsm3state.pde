@@ -12,7 +12,7 @@ void draw() {
   background(hex);
   time++;
 
- textSize(30);
+  textSize(30);
   text(state, 60, 60);
   
   if (time > seconds) {
