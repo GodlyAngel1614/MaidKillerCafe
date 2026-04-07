@@ -11,6 +11,9 @@ void setup() {
 void draw() {
   background(hex);
   time++;
+  
+  textSize(30);
+  text(state, 60, 60);
 
   if (state == 3 && time > seconds) {
     state = 4;
