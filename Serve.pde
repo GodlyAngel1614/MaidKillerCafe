@@ -1,4 +1,0 @@
-class Serve {
-  Serve() {
-  }
-}

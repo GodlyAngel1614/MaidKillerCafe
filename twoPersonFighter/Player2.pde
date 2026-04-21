@@ -1,0 +1,110 @@
+class Player2 {
+  float xPos;
+  float yPos;
+  float xVelo;
+  float yVelo;
+  float health;
+  PImage currentImage, idle, attack1, attack2, combo;
+  int score;
+  boolean left;
+  
+  int timer = 0;
+
+  Player2(float x, float y, boolean left) {
+    this.xPos = x;
+    this.yPos = y;
+    xVelo = 0;
+    yVelo = 0;
+    health = 1;
+    score = 200;
+    this.left = left;
+    idle = loadImage("player_2_idle.png");  
+    idle.resize(300, 400);
+    attack1 = loadImage("player_2_attack_1.png");
+    attack1.resize(300, 400);
+    
+    attack2 = loadImage("player_2_attack_2.png");
+    attack2.resize(300, 400);
+    
+    currentImage = idle;
+  }
+
+  void update() {
+    xPos += xVelo;
+    yPos += yVelo;
+  }
+
+  void display() {
+    push();
+    translate(xPos, yPos);
+    scale(1, left ? -1 : 1);
+    imageMode(CENTER);
+    image(currentImage, 0, 0);
+    pop();
+    
+    if (currentImage != idle) {
+      timer ++;
+      
+      if (timer > 80) {
+        timer = 0;
+        currentImage = idle;
+      }
+    }
+  }
+
+  void keyPressed() {
+    if (keyCode == RIGHT) {
+      xVelo = 2;
+    }
+    if (keyCode == LEFT) {
+      xVelo = -2;
+    }
+   if (keyCode == DOWN) {
+      yVelo = 2;
+    }
+    if (keyCode == UP) {
+      yVelo = -2;
+    } 
+    
+    if (key == 'j') {
+      currentImage = attack1;
+    } else if (key == 'k') {
+      currentImage = attack2;
+    }
+  }
+
+  void keyReleased() {
+      if (keyCode == RIGHT) {
+      xVelo = 0;
+    }
+    if (keyCode == LEFT) {
+      xVelo = 0;
+    }
+     if (keyCode == DOWN) {
+      yVelo = 0;
+    }
+   if (keyCode == UP) {
+      yVelo = 0;
+    }
+  }
+
+  float hitBoxOffset() {
+    return 40;
+  }
+
+  float left() {
+    return xPos - hitBoxOffset() ;
+  }
+
+  float right() {
+    return xPos + hitBoxOffset() ;
+  }
+
+  float top() {
+    return yPos - hitBoxOffset() ;
+  }
+
+  float bottom() {
+    return yPos + hitBoxOffset() ;
+  }
+}
