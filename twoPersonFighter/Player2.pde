@@ -5,22 +5,25 @@ class Player2 {
   float yVelo;
   float originalYPos;
   float health;
+  int level;
   PImage currentImage, idle, attack1, attack2, combo;
   String currentAction = "idle";
   int score;
   boolean left;
+  boolean wasHit = false;
 
   int timer = 0;
 
   Player2(float x, float y, boolean left) {
     this.xPos = x;
     this.yPos = y;
-    
+
     this.originalYPos = y;
     xVelo = 0;
     yVelo = 0;
+    level = 0;
     health = 100;
-    score = 200;
+    score = 0;
     this.left = left;
     idle = loadImage("player_2_idle.png");
     idle.resize(300, 400);
@@ -46,10 +49,20 @@ class Player2 {
     image(currentImage, 0, 0);
     pop();
 
-    if (currentImage != idle || currentAction == "Jumping") {
+    if (currentImage != idle  && currentAction != "Jumping") {
       timer ++;
 
       if (timer > 60) {
+        timer = 0;
+        currentImage = idle;
+        currentAction  = "idle";
+      }
+      
+      wasHit = false;
+    } else if (currentAction == "Jumping") {
+      timer ++;
+
+      if (timer > 80) {
         timer = 0;
         currentImage = idle;
         currentAction  = "idle";
@@ -97,11 +110,14 @@ class Player2 {
     }
   }
 
-  void takeDamage(int dam) {
-    if (health <= 0) return;
-
+  boolean takeDamage(int dam) {
+    if (health <= 0) {};
     health -= dam;
+    wasHit = true;
+    
+    return wasHit;
   }
+
 
   float hitBoxOffset() {
     return 40;

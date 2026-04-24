@@ -4,8 +4,9 @@ class Game {
   boolean gameOver;
   boolean debounce = false;
   int timer = 0;
-  Player player1;
-  Player2 player2;
+  boolean player2wasHit = false;
+  boolean player1wasHit = false;
+ 
   ScoreBoard theScoreBoard;
 
   Game() {
@@ -27,6 +28,8 @@ class Game {
 
     theScoreBoard.updateHealth1(player1.health);
     theScoreBoard.updateHealth2(player2.health);
+    
+    theScoreBoard.updateLevel(player1.level, player2.level);
 
     player1.display();
     player2.display();
@@ -37,19 +40,31 @@ class Game {
       if (player2.currentAction == "Slice 1") {
         if (!debounce) {
           debounce = true;
-          player1.takeDamage(5);
+          player1wasHit = player1.takeDamage(5);
+
+          if (player1wasHit) {
+            player2.score += 10;
+          }
         };
       } else if (player1.currentAction == "Attack 1" && player2.currentAction != "Jumping") {
-         if (!debounce) {
+        if (!debounce) {
           debounce = true;
-          player2.takeDamage(10);
+          player2wasHit =  player2.takeDamage(10);
+
+          if (player2wasHit) {
+            player1.score += 10;
+          }
         };
       } else if (player2.currentAction == "Slice 2" && player1.currentAction != "Jumping") {
         if (!debounce) {
           debounce = true;
-          player1.takeDamage(15);
+          player1wasHit = player1.takeDamage(15);
+
+          if (player1wasHit) {
+            player2.score += 10 * 1.3;
+          }
         };
-      } 
+      }
     } else {
     }
 
@@ -58,7 +73,7 @@ class Game {
       if (timer >= 60 * 2 ) {
         debounce = false;
         timer = 0;
-      }      
+      }
     }
 
     if (player1.health <= 0 || player2.health <= 0) {
@@ -72,7 +87,7 @@ class Game {
   }
 
   void keyPressed() {
-    theScoreBoard.updateScore(player1.score);
+    theScoreBoard.updateScore(player1.score, player2.score);
     player1.keyPressed();
     player2.keyPressed();
 

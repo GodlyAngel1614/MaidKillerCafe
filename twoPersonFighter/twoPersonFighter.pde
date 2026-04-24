@@ -10,7 +10,8 @@ int state;
 int tileSize = 40;
 boolean fmPlayer = false;
 SoundFile fM;
-
+Player player1;
+Player2 player2;
 
 void setup() {
   fM = new SoundFile(this, "fightMusic.mp3");
@@ -59,7 +60,14 @@ void draw() {
   } else if (state == 2) {
     theGame.display();
   } else if (state == 3) {
-    winningPlayerScreen.display(1);
+
+    if (player1.score > player2.score) {
+      winningPlayerScreen.display(1);
+      player1.level += 1;
+    } else {
+      winningPlayerScreen.display(2);
+      player2.level += 1;
+    }
   } else if (state == 4) {
     background(0);
   }
@@ -74,7 +82,7 @@ void keyPressed() {
     restartGame();
   } else if (state == 2) {
     theGame.keyPressed();
-    
+
     if (fmPlayer) {
       return;
     } else {
