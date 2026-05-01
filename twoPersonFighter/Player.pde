@@ -24,9 +24,9 @@ class Player {
     level = 0;
     this.left = left;
     idle = loadImage("player_1_idle.png");
-    idle.resize(300, 400);
+  //  idle.resize(300, 400);
     attacking = loadImage("player_1_attack.png");
-    attacking.resize(300, 400);
+    //attacking.resize(300, 400);
     this.originalYPos = y;
 
     currentImage = idle;
