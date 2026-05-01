@@ -6,6 +6,7 @@ class Game {
   int timer = 0;
   boolean player2wasHit = false;
   boolean player1wasHit = false;
+  PImage imgBackground;
  
   ScoreBoard theScoreBoard;
 
@@ -15,10 +16,11 @@ class Game {
     player1 = new Player(width * 0.25, height * 0.7, false);
     player2 = new Player2(width * 0.75, height * 0.7, false);
     theScoreBoard = new ScoreBoard(player1.health, player2.health);
+    imgBackground = loadImage("Background.png");
   }
 
   void display() {
-    background(90);
+    background(imgBackground);
 
     fill(#224411);
     rect(0, height * .7 + 200, width, height * 0.3);
